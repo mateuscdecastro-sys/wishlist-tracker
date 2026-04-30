@@ -69,7 +69,12 @@ def parse_items(html):
     soup = BeautifulSoup(html, "html.parser")
     items = []
 
-    for li in soup.select("li[data-itemId]"):
+    # Debug: show what item containers are present
+    for selector in ["li[data-itemId]", "div[data-itemId]", "[data-asin]", ".g-item-sortable"]:
+        found = soup.select(selector)
+        print(f"  selector '{selector}': {len(found)} matches")
+
+    for li in soup.select("li[data-itemId]") or soup.select("div[data-itemId]"):
         item_id = li.get("data-itemId", "")
 
         name_el = (
@@ -181,9 +186,9 @@ def main():
 
     if not items:
         print("WARNING: No items found. Wishlist may be empty or page structure changed.")
-        sys.exit(0)
+    else:
+        check_and_notify(items, prices, threshold, topic)
 
-    check_and_notify(items, prices, threshold, topic)
     save_prices(prices)
     print("Done.")
 
