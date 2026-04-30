@@ -74,6 +74,11 @@ def parse_items(html):
         found = soup.select(selector)
         print(f"  selector '{selector}': {len(found)} matches")
 
+    # Print HTML snippet to understand page structure
+    print("--- HTML snippet (first 3000 chars) ---")
+    print(html[:3000])
+    print("--- end snippet ---")
+
     for li in soup.select("li[data-itemId]") or soup.select("div[data-itemId]"):
         item_id = li.get("data-itemId", "")
 
